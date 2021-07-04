@@ -249,7 +249,8 @@ public class DruidQueryBasedInputFormat extends InputFormat<NullWritable, DruidW
     final InputStream response;
     try {
       response = DruidStorageHandlerUtils
-          .submitRequest(DruidStorageHandler.getHttpClient(), new Request(HttpMethod.GET, new URL(request)));
+          .submitRequest(DruidStorageHandler.getHttpClient(), new Request(HttpMethod.GET,
+                  new URL(request)).setBasicAuthentication("mdp-druid-user","walnut"));
     } catch (Exception e) {
       throw new IOException(org.apache.hadoop.util.StringUtils.stringifyException(e));
     }

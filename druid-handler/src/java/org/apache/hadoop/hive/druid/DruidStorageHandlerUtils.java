@@ -247,6 +247,7 @@ public final class DruidStorageHandlerUtils {
           throws IOException {
     return new Request(HttpMethod.POST, new URL(String.format("%s/druid/v2/", "http://" + address)))
             .setContent(SMILE_MAPPER.writeValueAsBytes(query))
+            .setBasicAuthentication("mdp-druid-user","walnut")
             .setHeader(HttpHeaders.Names.CONTENT_TYPE, SMILE_CONTENT_TYPE);
   }
 
