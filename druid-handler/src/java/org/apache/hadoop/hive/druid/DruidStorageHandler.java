@@ -440,6 +440,7 @@ public class DruidStorageHandler extends DefaultHiveMetaHook implements HiveStor
 
       StatusResponseHolder response = getHttpClient().go(new Request(HttpMethod.POST,
               new URL(String.format("http://%s/druid/indexer/v1/supervisor", overlordAddress)))
+                      .setBasicAuthentication(DruidStorageHandlerUtils.DRUID_USERNAME, DruidStorageHandlerUtils.DRUID_PASSWORD)
               .setContent(
                   "application/json",
                   JSON_MAPPER.writeValueAsBytes(spec)),
@@ -465,7 +466,7 @@ public class DruidStorageHandler extends DefaultHiveMetaHook implements HiveStor
           .retry(() -> getHttpClient().go(new Request(HttpMethod.POST,
                   new URL(String
                       .format("http://%s/druid/indexer/v1/supervisor/%s/reset", overlordAddress,
-                          dataSourceName))),
+                          dataSourceName))).setBasicAuthentication(DruidStorageHandlerUtils.DRUID_USERNAME, DruidStorageHandlerUtils.DRUID_PASSWORD),
               new StatusResponseHandler(
                   Charset.forName("UTF-8"))).get(),
               input -> input instanceof IOException,
@@ -488,7 +489,7 @@ public class DruidStorageHandler extends DefaultHiveMetaHook implements HiveStor
               .go(new Request(HttpMethod.POST,
                       new URL(String
                           .format("http://%s/druid/indexer/v1/supervisor/%s/shutdown", overlordAddress,
-                              dataSourceName))),
+                              dataSourceName))).setBasicAuthentication(DruidStorageHandlerUtils.DRUID_USERNAME, DruidStorageHandlerUtils.DRUID_PASSWORD),
                   new StatusResponseHandler(
                       Charset.forName("UTF-8"))).get(),
           input -> input instanceof IOException,
@@ -518,7 +519,7 @@ public class DruidStorageHandler extends DefaultHiveMetaHook implements HiveStor
       StatusResponseHolder response = RetryUtils.retry(() -> getHttpClient().go(new Request(HttpMethod.GET,
               new URL(String
                   .format("http://%s/druid/indexer/v1/supervisor/%s", overlordAddress,
-                      dataSourceName))),
+                      dataSourceName))).setBasicAuthentication(DruidStorageHandlerUtils.DRUID_USERNAME, DruidStorageHandlerUtils.DRUID_PASSWORD),
           new StatusResponseHandler(
               Charset.forName("UTF-8"))).get(),
           input -> input instanceof IOException,
@@ -557,7 +558,7 @@ public class DruidStorageHandler extends DefaultHiveMetaHook implements HiveStor
       StatusResponseHolder response = RetryUtils.retry(() -> getHttpClient().go(new Request(HttpMethod.GET,
                       new URL(String
                               .format("http://%s/druid/indexer/v1/supervisor/%s/status", overlordAddress,
-                                      dataSourceName))),
+                                      dataSourceName))).setBasicAuthentication(DruidStorageHandlerUtils.DRUID_USERNAME, DruidStorageHandlerUtils.DRUID_PASSWORD),
               new StatusResponseHandler(
                       Charset.forName("UTF-8"))).get(),
               input -> input instanceof IOException,

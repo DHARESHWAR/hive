@@ -166,6 +166,9 @@ public final class DruidStorageHandlerUtils {
    */
   public static final ObjectMapper JSON_MAPPER = new DefaultObjectMapper();
 
+  public static final String DRUID_USERNAME = "username";
+  public static final String DRUID_PASSWORD = "password";
+
   /**
    * Mapper to use to serialize/deserialize Druid objects (SMILE)
    */
@@ -247,7 +250,7 @@ public final class DruidStorageHandlerUtils {
           throws IOException {
     return new Request(HttpMethod.POST, new URL(String.format("%s/druid/v2/", "http://" + address)))
             .setContent(SMILE_MAPPER.writeValueAsBytes(query))
-            .setBasicAuthentication("mdp-druid-user","walnut")
+            .setBasicAuthentication(DRUID_USERNAME, DRUID_PASSWORD)
             .setHeader(HttpHeaders.Names.CONTENT_TYPE, SMILE_CONTENT_TYPE);
   }
 
@@ -277,7 +280,7 @@ public final class DruidStorageHandlerUtils {
 
   public static String getURL(HttpClient client, URL url) throws IOException {
     try (Reader reader = new InputStreamReader(
-            DruidStorageHandlerUtils.submitRequest(client, new Request(HttpMethod.GET, url)))) {
+            DruidStorageHandlerUtils.submitRequest(client, new Request(HttpMethod.GET, url).setBasicAuthentication(DRUID_USERNAME, DRUID_PASSWORD)))) {
       return CharStreams.toString(reader);
     }
   }
